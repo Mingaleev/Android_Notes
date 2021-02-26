@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,31 +42,7 @@ public class BlankFragmentOne extends Fragment {
     }
 
     private void initList(View view) {
-        LinearLayout layoutView = (LinearLayout) view;
 
-        for (int i = 0; i < simpleNotes.size(); i++) {
-            String note_title = simpleNotes.get(i).getTitle();
-            TextView tv = new TextView(getContext());
-            tv.setText(note_title);
-            tv.setTextSize(40);
-
-            tv.setPadding(getResources().getDimensionPixelSize(R.dimen.padding_left),
-                    getResources().getDimensionPixelSize(R.dimen.padding_top),
-                    getResources().getDimensionPixelSize(R.dimen.padding_right),
-                    getResources().getDimensionPixelSize(R.dimen.padding_bottom));
-            layoutView.addView(tv);
-
-            final int fi = i;
-            tv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    simpleNote = new SimpleNote(simpleNotes.get(fi).getTitle()
-                            , simpleNotes.get(fi).getDesc()
-                            , simpleNotes.get(fi).getDate());
-                    showNotes(simpleNote);
-                }
-            });
-        }
     }
 
     @Override
