@@ -21,6 +21,7 @@ class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> {
     public void setSimpleNotes (List<SimpleNote> items) {
         simpleNotes.clear();
         simpleNotes.addAll(items);
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -40,7 +41,7 @@ class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> {
         return simpleNotes.size();
     }
 
-    class NotesViewHolder extends RecyclerView.ViewHolder {
+    static class NotesViewHolder extends RecyclerView.ViewHolder {
 
         private MaterialTextView textViewTitle;
         private MaterialTextView textViewDate;

@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,7 @@ public class BlankFragmentOne extends Fragment {
     private static final String ARG_R = "note_r";
     private SimpleNote simpleNote;
     private List<SimpleNote> simpleNotes = new ArrayList<>();
+    private final NotesAdapter notesAdapter = new NotesAdapter();
     private boolean isLandscape;
 
     @Override
@@ -41,9 +44,6 @@ public class BlankFragmentOne extends Fragment {
         initList(view);
     }
 
-    private void initList(View view) {
-
-    }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -54,6 +54,7 @@ public class BlankFragmentOne extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        notesAdapter.setSimpleNotes(simpleNotes);
 
         isLandscape = getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_LANDSCAPE;
@@ -67,6 +68,12 @@ public class BlankFragmentOne extends Fragment {
         if (isLandscape) {
             showLandNote(simpleNote);
         }
+    }
+
+    private void initList(View view) {
+        RecyclerView recyclerView = view.findViewById(R.id.rv_notes);
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+        recyclerView.setAdapter(notesAdapter);
     }
 
     private void showNotes(SimpleNote simpleNote) {
@@ -101,6 +108,11 @@ public class BlankFragmentOne extends Fragment {
         simpleNotes.add(new SimpleNote("Second", "second entry", "20.02.2021"));
         simpleNotes.add(new SimpleNote("Third", "third entry", "21.02.2021"));
         simpleNotes.add(new SimpleNote("Fourth", "fourth entry", "22.02.2021"));
+        simpleNotes.add(new SimpleNote("Fifth", "fifth entry", "23.02.2021"));
+        simpleNotes.add(new SimpleNote("Fifth", "fifth entry", "23.02.2021"));
+        simpleNotes.add(new SimpleNote("Fifth", "fifth entry", "23.02.2021"));
+        simpleNotes.add(new SimpleNote("Fifth", "fifth entry", "23.02.2021"));
+        simpleNotes.add(new SimpleNote("Fifth", "fifth entry", "23.02.2021"));
         simpleNotes.add(new SimpleNote("Fifth", "fifth entry", "23.02.2021"));
     }
 }
