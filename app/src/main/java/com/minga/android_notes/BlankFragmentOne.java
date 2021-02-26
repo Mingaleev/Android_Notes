@@ -98,7 +98,9 @@ public class BlankFragmentOne extends Fragment {
 
     private void initNotes() {
         simpleNotes.add(new SimpleNote("First", "first entry", "19.02.2021"));
-        simpleNotes.add(new SimpleNote("Second", "second entry", "19.02.2021"));
-        simpleNotes.add(new SimpleNote("Third", "third entry", "19.02.2021"));
+        simpleNotes.add(new SimpleNote("Second", "second entry", "20.02.2021"));
+        simpleNotes.add(new SimpleNote("Third", "third entry", "21.02.2021"));
+        simpleNotes.add(new SimpleNote("Fourth", "fourth entry", "22.02.2021"));
+        simpleNotes.add(new SimpleNote("Fifth", "fifth entry", "23.02.2021"));
     }
 }
