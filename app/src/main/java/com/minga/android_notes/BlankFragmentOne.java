@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -73,6 +74,10 @@ public class BlankFragmentOne extends Fragment {
     private void initList(View view) {
         RecyclerView recyclerView = view.findViewById(R.id.rv_notes);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext()
+                , RecyclerView.VERTICAL));
+        recyclerView.addItemDecoration(new NotesSpaceDecorator(getResources()
+                .getDimensionPixelOffset(R.dimen.space_rv)));
         recyclerView.setAdapter(notesAdapter);
     }
 
