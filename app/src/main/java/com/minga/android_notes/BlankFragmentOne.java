@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,13 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class BlankFragmentOne extends Fragment {
+public class BlankFragmentOne extends Fragment implements NotesAdapterCallback {
 
     private static final String ARG_NOTE = "note";
     private static final String ARG_R = "note_r";
     private SimpleNote simpleNote;
     private List<SimpleNote> simpleNotes = new ArrayList<>();
-    private final NotesAdapter notesAdapter = new NotesAdapter();
+    private final NotesAdapter notesAdapter = new NotesAdapter(this);
     private boolean isLandscape;
 
     @Override
@@ -117,5 +116,10 @@ public class BlankFragmentOne extends Fragment {
         simpleNotes.add(new SimpleNote("Fifth", "fifth entry", "23.02.2021"));
         simpleNotes.add(new SimpleNote("Fifth", "fifth entry", "23.02.2021"));
         simpleNotes.add(new SimpleNote("Fifth", "fifth entry", "23.02.2021"));
+    }
+
+    @Override
+    public void onClickItem(SimpleNote simpleNote) {
+        showNotes(simpleNote);
     }
 }

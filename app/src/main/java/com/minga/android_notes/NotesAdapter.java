@@ -17,8 +17,14 @@ class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> {
 
     private final List<SimpleNote> simpleNotes = new ArrayList<>();
     private static final String TAG = "NotesAdapter";
+    private final NotesAdapterCallback callback;
 
-    public void setSimpleNotes (List<SimpleNote> items) {
+    NotesAdapter(NotesAdapterCallback callback) {
+        this.callback = callback;
+    }
+
+
+    public void setSimpleNotes(List<SimpleNote> items) {
         simpleNotes.clear();
         simpleNotes.addAll(items);
         notifyDataSetChanged();
@@ -27,13 +33,13 @@ class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> {
     @NonNull
     @Override
     public NotesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notes, parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notes, parent, false);
         return new NotesViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull NotesViewHolder holder, int position) {
-        holder.onBind(simpleNotes.get(position),position);
+        holder.onBind(simpleNotes.get(position), position);
     }
 
     @Override
@@ -41,7 +47,7 @@ class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> {
         return simpleNotes.size();
     }
 
-    static class NotesViewHolder extends RecyclerView.ViewHolder {
+    class NotesViewHolder extends RecyclerView.ViewHolder {
 
         private MaterialTextView textViewTitle;
         private MaterialTextView textViewDate;
@@ -52,10 +58,17 @@ class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> {
             textViewDate = itemView.findViewById(R.id.tv_rv_date);
         }
 
-        public void onBind (SimpleNote model, int position) {
-            Log.d(TAG,String.valueOf(position));
+        public void onBind(final SimpleNote model, int position) {
+            Log.d(TAG, String.valueOf(position));
             textViewTitle.setText(model.getTitle());
             textViewDate.setText(model.getDate());
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    callback.onClickItem(model);
+                }
+            });
         }
 
     }
