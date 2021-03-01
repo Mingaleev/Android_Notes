@@ -66,7 +66,9 @@ class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    callback.onClickItem(model);
+                    if (getAdapterPosition() != RecyclerView.NO_POSITION) {
+                        callback.onClickItem(model);
+                    }
                 }
             });
         }
