@@ -2,9 +2,6 @@ package com.minga.android_notes;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -14,10 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.appbar.MaterialToolbar;
+
 public class NotesBlankFragment extends Fragment {
 
     private static final String ARG_NOTE = "note";
     private SimpleNote simpleNote;
+    private MaterialToolbar toolbar;
 
     public static NotesBlankFragment newInstanse(SimpleNote simpleNote) {
         NotesBlankFragment f = new NotesBlankFragment();
@@ -47,21 +47,20 @@ public class NotesBlankFragment extends Fragment {
 
         EditText et_desc = view.findViewById(R.id.desc);
         et_desc.setText(simpleNote.getDesc());
-        setHasOptionsMenu(true);
+        toolbar = view.findViewById(R.id.tb_note_blank);
         return view;
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.share, menu);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getActivity() != null) {
+                    getActivity().onBackPressed();
+                }
+            }
+        });
     }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_share) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
 }

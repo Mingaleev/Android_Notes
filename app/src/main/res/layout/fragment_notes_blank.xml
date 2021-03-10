@@ -3,8 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".NotesBlankFragment">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/tb_note_blank"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+        android:background="@color/colorPrimaryDark" />
 
     <TextView
         android:id="@+id/tv_title"

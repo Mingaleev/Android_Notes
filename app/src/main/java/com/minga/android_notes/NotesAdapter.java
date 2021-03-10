@@ -33,7 +33,8 @@ class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> {
     @NonNull
     @Override
     public NotesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notes, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_notes, parent, false);
         return new NotesViewHolder(view);
     }
 
