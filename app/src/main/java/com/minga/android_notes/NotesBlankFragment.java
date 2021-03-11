@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,8 @@ public class NotesBlankFragment extends Fragment {
     private MaterialToolbar toolbar;
     private EditText etBlankTitle;
     private EditText etBlankDesc;
+    private Button btn_update;
+    private Button btn_remove;
 
     public static NotesBlankFragment newInstanse(SimpleNote simpleNote) {
         NotesBlankFragment f = new NotesBlankFragment();
@@ -48,9 +51,13 @@ public class NotesBlankFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         etBlankTitle = view.findViewById(R.id.et_note_blank_title);
         etBlankTitle.setText(simpleNote.getTitle());
+
         etBlankDesc = view.findViewById(R.id.et_note_blank_desc);
         etBlankDesc.setText(simpleNote.getDesc());
+
         toolbar = view.findViewById(R.id.tb_note_blank);
+        btn_update = view.findViewById(R.id.btn_note_blank_update);
+        btn_remove = view.findViewById(R.id.btn_note_blank_remove);
     }
 
     @Override
