@@ -17,10 +17,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BlankFragmentOne blankFragmentOne = new BlankFragmentOne();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.fragment_container, blankFragmentOne).commit();
+        if (savedInstanceState == null) {
+            BlankFragmentOne blankFragmentOne = new BlankFragmentOne();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, blankFragmentOne)
+                    .commit();
+
+
+        }
 
         initToolbar();
     }
