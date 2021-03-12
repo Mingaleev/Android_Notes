@@ -5,25 +5,26 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class BlankFragmentOne extends Fragment {
+public class BlankFragmentOne extends Fragment implements NotesAdapterCallback {
 
     private static final String ARG_NOTE = "note";
     private static final String ARG_R = "note_r";
     private SimpleNote simpleNote;
     private List<SimpleNote> simpleNotes = new ArrayList<>();
+    private final NotesAdapter notesAdapter = new NotesAdapter(this);
     private boolean isLandscape;
 
     @Override
@@ -31,6 +32,7 @@ public class BlankFragmentOne extends Fragment {
         initNotes();
         super.onCreate(savedInstanceState);
     }
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,33 +45,6 @@ public class BlankFragmentOne extends Fragment {
         initList(view);
     }
 
-    private void initList(View view) {
-        LinearLayout layoutView = (LinearLayout) view;
-
-        for (int i = 0; i < simpleNotes.size(); i++) {
-            String note_title = simpleNotes.get(i).getTitle();
-            TextView tv = new TextView(getContext());
-            tv.setText(note_title);
-            tv.setTextSize(40);
-
-            tv.setPadding(getResources().getDimensionPixelSize(R.dimen.padding_left),
-                    getResources().getDimensionPixelSize(R.dimen.padding_top),
-                    getResources().getDimensionPixelSize(R.dimen.padding_right),
-                    getResources().getDimensionPixelSize(R.dimen.padding_bottom));
-            layoutView.addView(tv);
-
-            final int fi = i;
-            tv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    simpleNote = new SimpleNote(simpleNotes.get(fi).getTitle()
-                            , simpleNotes.get(fi).getDesc()
-                            , simpleNotes.get(fi).getDate());
-                    showNotes(simpleNote);
-                }
-            });
-        }
-    }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -80,6 +55,7 @@ public class BlankFragmentOne extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        notesAdapter.setSimpleNotes(simpleNotes);
 
         isLandscape = getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_LANDSCAPE;
@@ -93,6 +69,14 @@ public class BlankFragmentOne extends Fragment {
         if (isLandscape) {
             showLandNote(simpleNote);
         }
+    }
+
+    private void initList(View view) {
+        RecyclerView recyclerView = view.findViewById(R.id.rv_notes);
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+        recyclerView.addItemDecoration(new NotesSpaceDecorator(getResources()
+                .getDimensionPixelOffset(R.dimen.space_rv)));
+        recyclerView.setAdapter(notesAdapter);
     }
 
     private void showNotes(SimpleNote simpleNote) {
@@ -124,7 +108,19 @@ public class BlankFragmentOne extends Fragment {
 
     private void initNotes() {
         simpleNotes.add(new SimpleNote("First", "first entry", "19.02.2021"));
-        simpleNotes.add(new SimpleNote("Second", "second entry", "19.02.2021"));
-        simpleNotes.add(new SimpleNote("Third", "third entry", "19.02.2021"));
+        simpleNotes.add(new SimpleNote("Second", "second entry", "20.02.2021"));
+        simpleNotes.add(new SimpleNote("Third", "third entry", "21.02.2021"));
+        simpleNotes.add(new SimpleNote("Fourth", "fourth entry", "22.02.2021"));
+        simpleNotes.add(new SimpleNote("Fifth", "fifth entry", "23.02.2021"));
+        simpleNotes.add(new SimpleNote("Fifth", "fifth entry", "23.02.2021"));
+        simpleNotes.add(new SimpleNote("Fifth", "fifth entry", "23.02.2021"));
+        simpleNotes.add(new SimpleNote("Fifth", "fifth entry", "23.02.2021"));
+        simpleNotes.add(new SimpleNote("Fifth", "fifth entry", "23.02.2021"));
+        simpleNotes.add(new SimpleNote("Fifth", "fifth entry", "23.02.2021"));
+    }
+
+    @Override
+    public void onClickItem(SimpleNote simpleNote) {
+        showNotes(simpleNote);
     }
 }

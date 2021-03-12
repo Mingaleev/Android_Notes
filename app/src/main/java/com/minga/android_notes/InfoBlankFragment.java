@@ -15,10 +15,6 @@ public class InfoBlankFragment extends Fragment {
     private String mParam1;
 
 
-    public InfoBlankFragment() {
-        // Required empty public constructor
-    }
-
     public static InfoBlankFragment newInstance(String param1) {
         InfoBlankFragment fragment = new InfoBlankFragment();
         Bundle args = new Bundle();
