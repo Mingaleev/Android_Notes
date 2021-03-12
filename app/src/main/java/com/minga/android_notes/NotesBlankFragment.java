@@ -2,22 +2,26 @@ package com.minga.android_notes;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.appbar.MaterialToolbar;
+
 public class NotesBlankFragment extends Fragment {
 
     private static final String ARG_NOTE = "note";
     private SimpleNote simpleNote;
+    private MaterialToolbar toolbar;
+    private EditText etBlankTitle;
+    private EditText etBlankDesc;
+    private Button btn_update;
+    private Button btn_remove;
 
     public static NotesBlankFragment newInstanse(SimpleNote simpleNote) {
         NotesBlankFragment f = new NotesBlankFragment();
@@ -38,30 +42,34 @@ public class NotesBlankFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_notes_blank, container, false);
-        TextView tv_title = view.findViewById(R.id.tv_title);
-        tv_title.setText(simpleNote.getTitle());
+        return inflater.inflate(R.layout.fragment_notes_blank, container, false);
 
-        TextView tv_date = view.findViewById(R.id.tv_date);
-        tv_date.setText(simpleNote.getDate());
-
-        EditText et_desc = view.findViewById(R.id.desc);
-        et_desc.setText(simpleNote.getDesc());
-        setHasOptionsMenu(true);
-        return view;
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.share, menu);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        etBlankTitle = view.findViewById(R.id.et_note_blank_title);
+        etBlankTitle.setText(simpleNote.getTitle());
+
+        etBlankDesc = view.findViewById(R.id.et_note_blank_desc);
+        etBlankDesc.setText(simpleNote.getDesc());
+
+        toolbar = view.findViewById(R.id.tb_note_blank);
+        btn_update = view.findViewById(R.id.btn_note_blank_update);
+        btn_remove = view.findViewById(R.id.btn_note_blank_remove);
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_share) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getActivity() != null) {
+                    getActivity().onBackPressed();
+                }
+            }
+        });
     }
-
 }

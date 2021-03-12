@@ -33,6 +33,7 @@ public class BlankFragmentOne extends Fragment implements NotesAdapterCallback {
         super.onCreate(savedInstanceState);
     }
 
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_blank_one, container, false);
