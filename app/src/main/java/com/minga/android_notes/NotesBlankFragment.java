@@ -1,6 +1,7 @@
 package com.minga.android_notes;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,5 +72,21 @@ public class NotesBlankFragment extends Fragment {
                 }
             }
         });
+
+        btn_update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String title = etBlankTitle.getText().toString();
+                final String desc = etBlankDesc.getText().toString();
+                saveDataToDatabase(title, desc);
+            }
+        });
+    }
+
+    private void saveDataToDatabase (@Nullable String title,@Nullable String desc) {
+        if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(desc)) {
+            // Todo
+        }
     }
 }
+
