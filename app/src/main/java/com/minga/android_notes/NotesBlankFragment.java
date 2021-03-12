@@ -12,7 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class NotesBlankFragment extends Fragment {
 
@@ -23,11 +30,12 @@ public class NotesBlankFragment extends Fragment {
     private EditText etBlankDesc;
     private Button btn_update;
     private Button btn_remove;
+    private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
-    public static NotesBlankFragment newInstanse(SimpleNote simpleNote) {
+    public static NotesBlankFragment newInstanse(@Nullable SimpleNote simpleNote) {
         NotesBlankFragment f = new NotesBlankFragment();
         Bundle args = new Bundle();
-        args.putParcelable(ARG_NOTE, simpleNote);
+        args.putSerializable(ARG_NOTE, simpleNote);
         f.setArguments(args);
         return f;
     }
@@ -51,10 +59,12 @@ public class NotesBlankFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         etBlankTitle = view.findViewById(R.id.et_note_blank_title);
-        etBlankTitle.setText(simpleNote.getTitle());
-
         etBlankDesc = view.findViewById(R.id.et_note_blank_desc);
-        etBlankDesc.setText(simpleNote.getDesc());
+        if (simpleNote != null) {
+            etBlankTitle.setText(simpleNote.getTitle());
+            etBlankDesc.setText(simpleNote.getDesc());
+        }
+
 
         toolbar = view.findViewById(R.id.tb_note_blank);
         btn_update = view.findViewById(R.id.btn_note_blank_update);
@@ -83,9 +93,28 @@ public class NotesBlankFragment extends Fragment {
         });
     }
 
-    private void saveDataToDatabase (@Nullable String title,@Nullable String desc) {
+    private void saveDataToDatabase(@Nullable String title, @Nullable String desc) {
         if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(desc)) {
-            // Todo
+            final String id = UUID.randomUUID().toString();
+            final Map<String, Object> map = new HashMap<>();
+            map.put("id", id);
+            map.put("title", title);
+            map.put("desc", desc);
+            firebaseFirestore.collection(Constants.TABLE_NAME_NOTES)
+                    .document(id)
+                    .set(map)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                        }
+                    });
         }
     }
 }

@@ -14,6 +14,13 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -26,10 +33,11 @@ public class BlankFragmentOne extends Fragment implements NotesAdapterCallback {
     private List<SimpleNote> simpleNotes = new ArrayList<>();
     private final NotesAdapter notesAdapter = new NotesAdapter(this);
     private boolean isLandscape;
+    private FloatingActionButton floatingActionButton;
+    private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        initNotes();
         super.onCreate(savedInstanceState);
     }
 
@@ -43,19 +51,20 @@ public class BlankFragmentOne extends Fragment implements NotesAdapterCallback {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initList(view);
+        floatingActionButton = view.findViewById(R.id.fb_note_add);
     }
 
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putParcelable(ARG_NOTE, simpleNote);
+        outState.putSerializable(ARG_NOTE, simpleNote);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        notesAdapter.setSimpleNotes(simpleNotes);
+        getNotes();
 
         isLandscape = getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_LANDSCAPE;
@@ -63,12 +72,19 @@ public class BlankFragmentOne extends Fragment implements NotesAdapterCallback {
         if (savedInstanceState != null) {
             simpleNote = savedInstanceState.getParcelable(ARG_NOTE);
         } else {
-            simpleNote = simpleNotes.get(0);
+//            simpleNote = simpleNotes.get(0);
         }
 
         if (isLandscape) {
             showLandNote(simpleNote);
         }
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPortNote(null);
+            }
+        });
     }
 
     private void initList(View view) {
@@ -87,7 +103,7 @@ public class BlankFragmentOne extends Fragment implements NotesAdapterCallback {
         }
     }
 
-    private void showPortNote(SimpleNote simpleNote) {
+    private void showPortNote(@Nullable SimpleNote simpleNote) {
         NotesBlankFragment detail = NotesBlankFragment.newInstanse(simpleNote);
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = Objects.requireNonNull(fragmentManager).beginTransaction();
@@ -106,21 +122,33 @@ public class BlankFragmentOne extends Fragment implements NotesAdapterCallback {
 
     }
 
-    private void initNotes() {
-        simpleNotes.add(new SimpleNote("First", "first entry", "19.02.2021"));
-        simpleNotes.add(new SimpleNote("Second", "second entry", "20.02.2021"));
-        simpleNotes.add(new SimpleNote("Third", "third entry", "21.02.2021"));
-        simpleNotes.add(new SimpleNote("Fourth", "fourth entry", "22.02.2021"));
-        simpleNotes.add(new SimpleNote("Fifth", "fifth entry", "23.02.2021"));
-        simpleNotes.add(new SimpleNote("Fifth", "fifth entry", "23.02.2021"));
-        simpleNotes.add(new SimpleNote("Fifth", "fifth entry", "23.02.2021"));
-        simpleNotes.add(new SimpleNote("Fifth", "fifth entry", "23.02.2021"));
-        simpleNotes.add(new SimpleNote("Fifth", "fifth entry", "23.02.2021"));
-        simpleNotes.add(new SimpleNote("Fifth", "fifth entry", "23.02.2021"));
-    }
 
     @Override
     public void onClickItem(SimpleNote simpleNote) {
         showNotes(simpleNote);
+    }
+
+    private void getNotes() {
+        firebaseFirestore
+                .collection(Constants.TABLE_NAME_NOTES)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.getResult() != null) {
+                            List<SimpleNote> items = task.getResult().toObjects(SimpleNote.class);
+                            simpleNotes.clear();
+                            simpleNotes.addAll(items);
+                            notesAdapter.setSimpleNotes(simpleNotes);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
     }
 }

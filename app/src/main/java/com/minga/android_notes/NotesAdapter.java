@@ -62,7 +62,7 @@ class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> {
         public void onBind(final SimpleNote model, int position) {
             Log.d(TAG, String.valueOf(position));
             textViewTitle.setText(model.getTitle());
-            textViewDate.setText(model.getDate());
+            textViewDate.setText(model.getId());
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
