@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "530518177986",
+    "project_id": "geeknotes-4232f",
+    "storage_bucket": "geeknotes-4232f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:530518177986:android:9c6470f70f729fdb04235b",
+        "android_client_info": {
+          "package_name": "com.minga.android_notes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "530518177986-bb0t8ukg500qvt1njf0c0n1f6b43c8sp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-x9Psx69AuOIRIYfKaFDSGAlSekPmzDQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "530518177986-bb0t8ukg500qvt1njf0c0n1f6b43c8sp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.minga.android_notes.notes.BlankFragmentOne;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override

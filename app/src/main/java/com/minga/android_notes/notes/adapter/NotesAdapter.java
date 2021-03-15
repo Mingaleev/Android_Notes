@@ -1,4 +1,4 @@
-package com.minga.android_notes;
+package com.minga.android_notes.notes.adapter;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,17 +9,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textview.MaterialTextView;
+import com.minga.android_notes.R;
+import com.minga.android_notes.model.SimpleNote;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> {
+public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> {
 
     private final List<SimpleNote> simpleNotes = new ArrayList<>();
     private static final String TAG = "NotesAdapter";
     private final NotesAdapterCallback callback;
 
-    NotesAdapter(NotesAdapterCallback callback) {
+    public NotesAdapter(NotesAdapterCallback callback) {
         this.callback = callback;
     }
 
@@ -62,7 +64,7 @@ class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> {
         public void onBind(final SimpleNote model, int position) {
             Log.d(TAG, String.valueOf(position));
             textViewTitle.setText(model.getTitle());
-            textViewDate.setText(model.getDate());
+            textViewDate.setText(model.getId());
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

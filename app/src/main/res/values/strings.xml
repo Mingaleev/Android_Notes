@@ -5,6 +5,9 @@
     <string name="info">Информация</string>
     <string name="note_blank_btn_remove">Удалить</string>
     <string name="note_blank_btn_update">Обновить</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="error_empty_fields">Поля не могут быть пустыми</string>
+    <string name="error_note">Произошла ошибка при обновлении или создании</string>
+    <string name="note_update_ok">Заметка успешно обновлена</string>
+    <string name="note_update_failed">Не удалось обновить заметку</string>
 </resources>
