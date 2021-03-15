@@ -1,10 +1,11 @@
-package com.minga.android_notes;
+package com.minga.android_notes.notes;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,27 +15,29 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.minga.android_notes.NotesSpaceDecorator;
+import com.minga.android_notes.R;
+import com.minga.android_notes.model.SimpleNote;
+import com.minga.android_notes.notes.adapter.NotesAdapter;
+import com.minga.android_notes.notes.adapter.NotesAdapterCallback;
+import com.minga.android_notes.notes.noteBlank.NotesBlankFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class BlankFragmentOne extends Fragment implements NotesAdapterCallback {
+public class BlankFragmentOne extends Fragment implements NotesAdapterCallback, NotesFirestoreCallbacks {
 
     private static final String ARG_NOTE = "note";
     private static final String ARG_R = "note_r";
     private SimpleNote simpleNote;
+    private NotesRepository repository = new NotesRepositoryImpl(this);
+
     private List<SimpleNote> simpleNotes = new ArrayList<>();
     private final NotesAdapter notesAdapter = new NotesAdapter(this);
     private boolean isLandscape;
     private FloatingActionButton floatingActionButton;
-    private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,7 +67,7 @@ public class BlankFragmentOne extends Fragment implements NotesAdapterCallback {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getNotes();
+        repository.requestNotes();
 
         isLandscape = getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_LANDSCAPE;
@@ -128,27 +131,22 @@ public class BlankFragmentOne extends Fragment implements NotesAdapterCallback {
         showNotes(simpleNote);
     }
 
-    private void getNotes() {
-        firebaseFirestore
-                .collection(Constants.TABLE_NAME_NOTES)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.getResult() != null) {
-                            List<SimpleNote> items = task.getResult().toObjects(SimpleNote.class);
-                            simpleNotes.clear();
-                            simpleNotes.addAll(items);
-                            notesAdapter.setSimpleNotes(simpleNotes);
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
 
-                    }
-                });
+    @Override
+    public void onSuccessNotes(@NonNull List<SimpleNote> items) {
+        simpleNotes.clear();
+        simpleNotes.addAll(items);
+        notesAdapter.setSimpleNotes(items);
+    }
 
+    @Override
+    public void onErrorNotes(@Nullable String message) {
+        showToast(message);
+    }
+
+    private void showToast(@Nullable String message) {
+        if (message != null) {
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -1,11 +1,8 @@
-package com.minga.android_notes;
-
-import android.os.Parcel;
-import android.os.Parcelable;
+package com.minga.android_notes.model;
 
 import java.io.Serializable;
 
-class SimpleNote implements Serializable {
+public class SimpleNote implements Serializable {
     private String id;
     private String title;
     private String desc;

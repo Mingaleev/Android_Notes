@@ -6,11 +6,11 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-class NotesSpaceDecorator extends RecyclerView.ItemDecoration {
+public class NotesSpaceDecorator extends RecyclerView.ItemDecoration {
 
     private final int defaultSpace;
 
-    NotesSpaceDecorator(int defaultSpace) {
+    public NotesSpaceDecorator(int defaultSpace) {
         this.defaultSpace = defaultSpace;
     }
 

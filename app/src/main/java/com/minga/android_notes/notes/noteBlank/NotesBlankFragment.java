@@ -1,4 +1,4 @@
-package com.minga.android_notes;
+package com.minga.android_notes.notes.noteBlank;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -7,21 +7,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.minga.android_notes.R;
+import com.minga.android_notes.model.SimpleNote;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
-public class NotesBlankFragment extends Fragment {
+public class NotesBlankFragment extends Fragment implements NoteFirestoreCallbacks{
+
+    private final NoteRepository repository = new NoteRepositoryImpl(this);
 
     private static final String ARG_NOTE = "note";
     private SimpleNote simpleNote;
@@ -30,7 +30,6 @@ public class NotesBlankFragment extends Fragment {
     private EditText etBlankDesc;
     private Button btn_update;
     private Button btn_remove;
-    private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
     public static NotesBlankFragment newInstanse(@Nullable SimpleNote simpleNote) {
         NotesBlankFragment f = new NotesBlankFragment();
@@ -44,7 +43,7 @@ public class NotesBlankFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            simpleNote = getArguments().getParcelable(ARG_NOTE);
+            simpleNote = (SimpleNote) getArguments().getSerializable(ARG_NOTE);
         }
     }
 
@@ -64,8 +63,6 @@ public class NotesBlankFragment extends Fragment {
             etBlankTitle.setText(simpleNote.getTitle());
             etBlankDesc.setText(simpleNote.getDesc());
         }
-
-
         toolbar = view.findViewById(R.id.tb_note_blank);
         btn_update = view.findViewById(R.id.btn_note_blank_update);
         btn_remove = view.findViewById(R.id.btn_note_blank_remove);
@@ -88,34 +85,49 @@ public class NotesBlankFragment extends Fragment {
             public void onClick(View v) {
                 final String title = etBlankTitle.getText().toString();
                 final String desc = etBlankDesc.getText().toString();
-                saveDataToDatabase(title, desc);
+                update(title, desc);
+            }
+        });
+
+        btn_remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                repository.deleteNote(simpleNote.getId());
+                if (getActivity() != null) {
+                    getActivity().onBackPressed();
+                }
             }
         });
     }
 
-    private void saveDataToDatabase(@Nullable String title, @Nullable String desc) {
+    @Override
+    public void onSuccess(@Nullable String message) {
+        showToastMessage(message);
+    }
+
+    @Override
+    public void onError(@Nullable String message) {
+        showToastMessage(message);
+    }
+
+    private void update(@Nullable String title,
+                        @Nullable String desc) {
+
         if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(desc)) {
-            final String id = UUID.randomUUID().toString();
-            final Map<String, Object> map = new HashMap<>();
-            map.put("id", id);
-            map.put("title", title);
-            map.put("desc", desc);
-            firebaseFirestore.collection(Constants.TABLE_NAME_NOTES)
-                    .document(id)
-                    .set(map)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-
-                        }
-                    });
+            if (simpleNote != null) {
+                repository.setNote(simpleNote.getId(),title,desc);
+            } else {
+                repository.setNote(UUID.randomUUID().toString(),title,desc);
+            }
+        } else {
+            showToastMessage("Поля не могут быть пустыми");
         }
     }
+
+    private void showToastMessage(@Nullable String message) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+
 }
 
