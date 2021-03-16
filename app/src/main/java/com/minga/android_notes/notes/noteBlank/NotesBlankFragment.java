@@ -1,5 +1,7 @@
 package com.minga.android_notes.notes.noteBlank;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -19,7 +21,7 @@ import com.minga.android_notes.model.SimpleNote;
 
 import java.util.UUID;
 
-public class NotesBlankFragment extends Fragment implements NoteFirestoreCallbacks{
+public class NotesBlankFragment extends Fragment implements NoteFirestoreCallbacks {
 
     private final NoteRepository repository = new NoteRepositoryImpl(this);
 
@@ -95,10 +97,7 @@ public class NotesBlankFragment extends Fragment implements NoteFirestoreCallbac
         btn_remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                repository.deleteNote(simpleNote.getId());
-                if (getActivity() != null) {
-                    getActivity().onBackPressed();
-                }
+                showAlertDialog();
             }
         });
     }
@@ -118,9 +117,9 @@ public class NotesBlankFragment extends Fragment implements NoteFirestoreCallbac
 
         if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(desc)) {
             if (simpleNote != null) {
-                repository.setNote(simpleNote.getId(),title,desc);
+                repository.setNote(simpleNote.getId(), title, desc);
             } else {
-                repository.setNote(UUID.randomUUID().toString(),title,desc);
+                repository.setNote(UUID.randomUUID().toString(), title, desc);
             }
         } else {
             showToastMessage("Поля не могут быть пустыми");
@@ -129,6 +128,23 @@ public class NotesBlankFragment extends Fragment implements NoteFirestoreCallbac
 
     private void showToastMessage(@Nullable String message) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showAlertDialog() {
+        new AlertDialog.Builder(getContext())
+                .setTitle(R.string.note_blank_alert_title)
+                .setMessage(R.string.note_blank_alert_message)
+                .setPositiveButton(R.string.note_blank_alert_button, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        repository.deleteNote(simpleNote.getId());
+                        if (getActivity() != null) {
+                            getActivity().onBackPressed();
+                        }
+                    }
+                })
+                .create()
+                .show();
     }
 
 
