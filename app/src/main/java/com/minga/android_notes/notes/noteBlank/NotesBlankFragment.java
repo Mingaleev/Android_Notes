@@ -59,13 +59,16 @@ public class NotesBlankFragment extends Fragment implements NoteFirestoreCallbac
         super.onViewCreated(view, savedInstanceState);
         etBlankTitle = view.findViewById(R.id.et_note_blank_title);
         etBlankDesc = view.findViewById(R.id.et_note_blank_desc);
+        btn_update = view.findViewById(R.id.btn_note_blank_update);
+        btn_remove = view.findViewById(R.id.btn_note_blank_remove);
         if (simpleNote != null) {
             etBlankTitle.setText(simpleNote.getTitle());
             etBlankDesc.setText(simpleNote.getDesc());
+        } else {
+            btn_update.setText("Добавить");
+            btn_remove.setVisibility(View.INVISIBLE);
         }
         toolbar = view.findViewById(R.id.tb_note_blank);
-        btn_update = view.findViewById(R.id.btn_note_blank_update);
-        btn_remove = view.findViewById(R.id.btn_note_blank_remove);
     }
 
     @Override
