@@ -10,4 +10,8 @@
     <string name="error_note">Произошла ошибка при обновлении или создании</string>
     <string name="note_update_ok">Заметка успешно обновлена</string>
     <string name="note_update_failed">Не удалось обновить заметку</string>
+    <string name="note_blank_alert_title">Предупреждение</string>
+    <string name="note_blank_alert_message">Вы точно хотите удалить заметку?</string>
+    <string name="note_blank_alert_button">Да</string>
+
 </resources>
